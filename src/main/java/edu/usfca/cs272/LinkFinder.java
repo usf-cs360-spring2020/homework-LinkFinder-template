@@ -14,14 +14,14 @@ import java.util.regex.Pattern;
  * Finds HTTP(S) URLs from the anchor tags within HTML code.
  *
  * @author CS 272 Software Development (University of San Francisco)
- * @version Fall 2022
+ * @version Spring 2023
  */
 public class LinkFinder {
 	/**
-	 * Returns a list of all the valid HTTP(S) URLs found in the HREF attribute
-	 * of the anchor tags in the provided HTML. The URLs will be converted to
-	 * absolute using the base URL and normalized (removing fragments and encoding
-	 * special characters as necessary).
+	 * Returns a list of all the valid HTTP(S) URLs found in the HREF attribute of
+	 * the anchor tags in the provided HTML. The URLs will be converted to absolute
+	 * using the base URL and normalized (removing fragments and encoding special
+	 * characters as necessary).
 	 *
 	 * Any URLs that are unable to be properly parsed (throwing an
 	 * {@link MalformedURLException}) or that do not have the HTTP/S protocol will
@@ -43,8 +43,8 @@ public class LinkFinder {
 	}
 
 	/**
-	 * Returns a list of all the valid HTTP(S) URLs found in the HREF attribute
-	 * of the anchor tags in the provided HTML.
+	 * Returns a list of all the valid HTTP(S) URLs found in the HREF attribute of
+	 * the anchor tags in the provided HTML.
 	 *
 	 * @param base the base URL used to convert relative URLs to absolute3
 	 * @param html the raw HTML associated with the base URL
@@ -84,8 +84,8 @@ public class LinkFinder {
 	 * @throws MalformedURLException if unable to craft new URL
 	 */
 	public static URL normalize(URL url) throws MalformedURLException, URISyntaxException {
-		return new URI(url.getProtocol(), url.getUserInfo(), url.getHost(),
-				url.getPort(), url.getPath(), url.getQuery(), null).toURL();
+		return new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(),
+				url.getPath(), url.getQuery(), null).toURL();
 	}
 
 	/**

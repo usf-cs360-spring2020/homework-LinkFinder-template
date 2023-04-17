@@ -13,14 +13,15 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.ClassOrderer.ClassName;
 import org.junit.jupiter.api.MethodOrderer.MethodName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestClassOrder;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-
 import org.junit.jupiter.api.TestMethodOrder;
 
 /**
@@ -29,23 +30,22 @@ import org.junit.jupiter.api.TestMethodOrder;
  * @see LinkFinder
  *
  * @author CS 272 Software Development (University of San Francisco)
- * @version Fall 2022
+ * @version Spring 2023
  */
-@TestMethodOrder(MethodName.class)
+@TestClassOrder(ClassName.class)
 public class LinkFinderTest {
+	// ███████╗████████╗ ██████╗ ██████╗
+	// ██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗
+	// ███████╗   ██║   ██║   ██║██████╔╝
+	// ╚════██║   ██║   ██║   ██║██╔═══╝
+	// ███████║   ██║   ╚██████╔╝██║
+	// ╚══════╝   ╚═╝    ╚═════╝ ╚═╝
 	/*
-	 * ███████╗████████╗ ██████╗ ██████╗
-	 * ██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗
-	 * ███████╗   ██║   ██║   ██║██████╔╝
-	 * ╚════██║   ██║   ██║   ██║██╔═══╝
-	 * ███████║   ██║   ╚██████╔╝██║
-	 * ╚══════╝   ╚═╝    ╚═════╝ ╚═╝
-	 *
-	 * ...and read this. The remote tests will NOT run unless you are
-	 * passing the local tests first. You should not try to run the
-	 * remote tests until the local tests are passing, and should avoid
-	 * rapidly re-running the remote tests over and over again. You risk
-	 * being blocked by our web server for making too many requests!
+	 * ...and read this. The remote tests will NOT run unless you are passing the
+	 * local tests first. You should not try to run the remote tests until the local
+	 * tests are passing, and should avoid rapidly re-running the remote tests over
+	 * and over again. You risk being blocked by our web server for making too many
+	 * requests!
 	 */
 
 	/**
@@ -455,7 +455,7 @@ public class LinkFinderTest {
 			@Order(1)
 			public void testHello() throws MalformedURLException {
 				ArrayList<URL> expected = new ArrayList<>();
-				testRemote("https://www.cs.usfca.edu/~cs272/simple/hello.html", expected);
+				testRemote("input/simple/hello.html", expected);
 			}
 
 			/**
@@ -466,18 +466,24 @@ public class LinkFinderTest {
 			@Test
 			@Order(2)
 			public void testSimple() throws MalformedURLException {
-				List<URL> expected = List.of(
-						new URL("https://www.cs.usfca.edu/~cs272/simple/a/b/c/subdir.html"),
-						new URL("https://www.cs.usfca.edu/~cs272/simple/capital_extension.HTML"),
-						new URL("https://www.cs.usfca.edu/~cs272/simple/double_extension.html.txt"),
-						new URL("https://www.cs.usfca.edu/~cs272/simple/empty.html"),
-						new URL("https://www.cs.usfca.edu/~cs272/simple/hello.html"),
-						new URL("https://www.cs.usfca.edu/~cs272/simple/mixed_case.htm"),
-						new URL("https://www.cs.usfca.edu/~cs272/simple/no_extension"),
-						new URL("https://www.cs.usfca.edu/~cs272/simple/position.html"),
-						new URL("https://www.cs.usfca.edu/~cs272/simple/symbols.html"));
+				URL base = new URL(GITHUB);
 
-				testRemote("https://www.cs.usfca.edu/~cs272/simple/index.html", expected);
+				List<URL> expected = List.of(
+						new URL(base, "input/simple/a/b/c/subdir.html"),
+						new URL(base, "input/simple/capital_extension.HTML"),
+						new URL(base, "input/simple/double_extension.html.txt"),
+						new URL(base, "input/simple/empty.html"),
+						new URL(base, "input/simple/hello.html"),
+						new URL(base, "input/simple/mixed_case.htm"),
+						new URL(base, "input/simple/no_extension"),
+						new URL(base, "input/simple/no_extension"),
+						new URL(base, "input/simple/position.html"),
+						new URL(base, "input/simple/stems.html"),
+						new URL(base, "input/simple/symbols.html"),
+						new URL(base, "input/simple/dir.txt"),
+						new URL(base, "input/simple/wrong_extension.html"));
+
+				testRemote("input/simple/index.html", expected);
 			}
 
 			/**
@@ -489,7 +495,7 @@ public class LinkFinderTest {
 			@Order(3)
 			public void testBirds() throws MalformedURLException {
 				List<URL> expected = getBirdURLs();
-				testRemote("https://www.cs.usfca.edu/~cs272/birds/birds.html", expected);
+				testRemote("input/birds/index.html", expected);
 			}
 		}
 
@@ -507,23 +513,24 @@ public class LinkFinderTest {
 			@Test
 			@Order(1)
 			public void testGuten1400() throws MalformedURLException {
-				URL base = new URL("https://www.cs.usfca.edu/~cs272/guten/1400-h/");
-				List<URL> copies = Collections.nCopies(59, new URL(base, "1400-h.htm"));
+				URL base = new URL(GITHUB);
+				URL guten = new URL(base, "input/guten/1400-h/");
+				List<URL> copies = Collections.nCopies(59, new URL(guten, "1400-h.htm"));
 				List<URL> images = List.of(
-						new URL(base, "images/0012.jpg"), new URL(base, "images/0037.jpg"),
-						new URL(base, "images/0072.jpg"), new URL(base, "images/0082.jpg"),
-						new URL(base, "images/0132.jpg"), new URL(base, "images/0189.jpg"),
-						new URL(base, "images/0223.jpg"), new URL(base, "images/0242.jpg"),
-						new URL(base, "images/0245.jpg"), new URL(base, "images/0279.jpg"),
-						new URL(base, "images/0295.jpg"), new URL(base, "images/0335.jpg"),
-						new URL(base, "images/0348.jpg"), new URL(base, "images/0393.jpg"),
-						new URL(base, "images/0399.jpg"));
+						new URL(guten, "images/0012.jpg"), new URL(guten, "images/0037.jpg"),
+						new URL(guten, "images/0072.jpg"), new URL(guten, "images/0082.jpg"),
+						new URL(guten, "images/0132.jpg"), new URL(guten, "images/0189.jpg"),
+						new URL(guten, "images/0223.jpg"), new URL(guten, "images/0242.jpg"),
+						new URL(guten, "images/0245.jpg"), new URL(guten, "images/0279.jpg"),
+						new URL(guten, "images/0295.jpg"), new URL(guten, "images/0335.jpg"),
+						new URL(guten, "images/0348.jpg"), new URL(guten, "images/0393.jpg"),
+						new URL(guten, "images/0399.jpg"));
 
 				List<URL> expected = new ArrayList<>();
 				expected.addAll(copies); // appears 59 times in table of contents
 				expected.addAll(images); // followed by many images
 
-				testRemote("https://www.cs.usfca.edu/~cs272/guten/1400-h/1400-h.htm", expected);
+				testRemote("input/guten/1400-h/1400-h.htm", expected);
 			}
 
 			/**
@@ -535,7 +542,7 @@ public class LinkFinderTest {
 			@Order(2)
 			public void testGutenberg() throws MalformedURLException {
 				List<URL> expected = getGutenURLs();
-				testRemote("https://www.cs.usfca.edu/~cs272/guten/index.html", expected);
+				testRemote("input/guten/index.html", expected);
 			}
 		}
 
@@ -631,15 +638,17 @@ public class LinkFinderTest {
 	 * @throws MalformedURLException if unable to create URLs
 	 */
 	public static void testRemote(String url, List<URL> expected) throws MalformedURLException {
-		URL base = new URL(url);
+		URL base = new URL(GITHUB);
+		URL link = new URL(base, url);
 
-		Assertions.assertTimeout(Duration.ofSeconds(30), () -> {
-			String html = getHTML(base);
-			List<URL> actual = LinkFinder.listUrls(base, html);
+		Assertions.assertTimeoutPreemptively(Duration.ofSeconds(30), () -> {
+			String html = getHTML(link);
+			List<URL> actual = LinkFinder.listUrls(link, html);
 
 			// compare strings for easier side-by-side debugging
-			String expectedText = expected.stream().map(u -> u.toString()).collect(Collectors.joining("\n"));
-			String actualText = actual.stream().map(u -> u.toString()).collect(Collectors.joining("\n"));
+			var joiner = Collectors.joining("\n");
+			String expectedText = expected.stream().map(URL::toString).collect(joiner);
+			String actualText = actual.stream().map(URL::toString).collect(joiner);
 
 			String debug = "Use the \"Result Comparison\" feature in Eclipse to compare results side-by-side.\n";
 			Assertions.assertEquals(expectedText, actualText, debug);
@@ -653,58 +662,62 @@ public class LinkFinderTest {
 	 * @throws MalformedURLException if unable to create URLs
 	 */
 	public static final List<URL> getBirdURLs() throws MalformedURLException {
+		URL base = new URL(GITHUB);
+
 		return List.of(
-				new URL("https://www.cs.usfca.edu/~cs272/birds/albatross.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/blackbird.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/bluebird.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/cardinal.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/chickadee.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/crane.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/crow.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/cuckoo.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/dove.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/duck.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/eagle.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/egret.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/falcon.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/finch.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/goose.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/gull.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/hawk.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/heron.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/hummingbird.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/ibis.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/kingfisher.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/loon.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/magpie.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/mallard.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/meadowlark.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/mockingbird.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/nighthawk.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/osprey.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/owl.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/pelican.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/pheasant.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/pigeon.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/puffin.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/quail.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/raven.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/roadrunner.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/robin.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/sandpiper.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/sparrow.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/starling.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/stork.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/swallow.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/swan.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/tern.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/turkey.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/vulture.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/warbler.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/woodpecker.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/wren.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/yellowthroat.html"),
-				new URL("https://www.cs.usfca.edu/~cs272/birds/birds.html"));
+				new URL(base, "input/birds/albatross.html"),
+				new URL(base, "input/birds/birds.html"),
+				new URL(base, "input/birds/blackbird.html"),
+				new URL(base, "input/birds/bluebird.html"),
+				new URL(base, "input/birds/cardinal.html"),
+				new URL(base, "input/birds/chickadee.html"),
+				new URL(base, "input/birds/crane.html"),
+				new URL(base, "input/birds/crow.html"),
+				new URL(base, "input/birds/cuckoo.html"),
+				new URL(base, "input/birds/dove.html"),
+				new URL(base, "input/birds/duck.html"),
+				new URL(base, "input/birds/eagle.html"),
+				new URL(base, "input/birds/egret.html"),
+				new URL(base, "input/birds/falcon.html"),
+				new URL(base, "input/birds/finch.html"),
+				new URL(base, "input/birds/goose.html"),
+				new URL(base, "input/birds/gull.html"),
+				new URL(base, "input/birds/hawk.html"),
+				new URL(base, "input/birds/heron.html"),
+				new URL(base, "input/birds/hummingbird.html"),
+				new URL(base, "input/birds/ibis.html"),
+				new URL(base, "input/birds/kingfisher.html"),
+				new URL(base, "input/birds/loon.html"),
+				new URL(base, "input/birds/magpie.html"),
+				new URL(base, "input/birds/mallard.html"),
+				new URL(base, "input/birds/meadowlark.html"),
+				new URL(base, "input/birds/mockingbird.html"),
+				new URL(base, "input/birds/nighthawk.html"),
+				new URL(base, "input/birds/osprey.html"),
+				new URL(base, "input/birds/owl.html"),
+				new URL(base, "input/birds/pelican.html"),
+				new URL(base, "input/birds/pheasant.html"),
+				new URL(base, "input/birds/pigeon.html"),
+				new URL(base, "input/birds/puffin.html"),
+				new URL(base, "input/birds/quail.html"),
+				new URL(base, "input/birds/raven.html"),
+				new URL(base, "input/birds/roadrunner.html"),
+				new URL(base, "input/birds/robin.html"),
+				new URL(base, "input/birds/sandpiper.html"),
+				new URL(base, "input/birds/sparrow.html"),
+				new URL(base, "input/birds/starling.html"),
+				new URL(base, "input/birds/stork.html"),
+				new URL(base, "input/birds/swallow.html"),
+				new URL(base, "input/birds/swan.html"),
+				new URL(base, "input/birds/tern.html"),
+				new URL(base, "input/birds/turkey.html"),
+				new URL(base, "input/birds/vulture.html"),
+				new URL(base, "input/birds/warbler.html"),
+				new URL(base, "input/birds/woodpecker.html"),
+				new URL(base, "input/birds/wren.html"),
+				new URL(base, "input/birds/yellowthroat.html"),
+				new URL(base, "input/birds/nowhere.html"),
+				new URL(base, "input/birds/"));
 	}
 
 	/**
@@ -714,14 +727,16 @@ public class LinkFinderTest {
 	 * @throws MalformedURLException if unable to create URLs
 	 */
 	public static List<URL> getGutenURLs() throws MalformedURLException {
+		URL base = new URL(GITHUB);
 		return List.of(
-				new URL("https://www.cs.usfca.edu/~cs272/guten/1400-h/1400-h.htm"),
-				new URL("https://www.cs.usfca.edu/~cs272/guten/50468-h/50468-h.htm"),
-				new URL("https://www.cs.usfca.edu/~cs272/guten/2701-h/2701-h.htm"),
-				new URL("https://www.cs.usfca.edu/~cs272/guten/1322-h/1322-h.htm"),
-				new URL("https://www.cs.usfca.edu/~cs272/guten/1661-h/1661-h.htm"),
-				new URL("https://www.cs.usfca.edu/~cs272/guten/22577-h/22577-h.htm"),
-				new URL("https://www.cs.usfca.edu/~cs272/guten/37134-h/37134-h.htm"));
+				new URL(base, "input/guten/1400-h/1400-h.htm"),
+				new URL(base, "input/guten/2701-h/2701-h.htm"),
+				new URL(base, "input/guten/50468-h/50468-h.htm"),
+				new URL(base, "input/guten/1322-h/1322-h.htm"),
+				new URL(base, "input/guten/1228-h/1228-h.htm"), // present unless removing comments
+				new URL(base, "input/guten/1661-h/1661-h.htm"),
+				new URL(base, "input/guten/22577-h/22577-h.htm"),
+				new URL(base, "input/guten/37134-h/37134-h.htm"));
 	}
 
 	/**
@@ -736,4 +751,7 @@ public class LinkFinderTest {
 			return new String(input.readAllBytes(), StandardCharsets.UTF_8);
 		}
 	}
+
+	/** Base URL for the GitHub test website. */
+	public static final String GITHUB = "https://usf-cs272-spring2023.github.io/project-web/";
 }
